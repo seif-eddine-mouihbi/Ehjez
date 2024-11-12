@@ -32,10 +32,13 @@ mongoose.connection.on('Connected', () => {
   console.log('Database Connected');
 });
 
-// Create the middlewares
+{
+  /* --------  The Middlewares --------- */
+}
 
 //Cookie
 app.use(cookieParser());
+
 // Parsing the data request from the client
 app.use(express.json());
 
