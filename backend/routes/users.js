@@ -6,10 +6,7 @@ import {
   getUsers,
   updateUser,
 } from '../controllers/user.js';
-import {
-  verifyAdmin,
-  verifyUser,
-} from '../utils/verify_token.js';
+import { verifyAdmin, verifyUser } from '../utils/verify_token.js';
 
 const router = express.Router();
 
@@ -32,9 +29,9 @@ router.get('/', verifyAdmin, getUsers);
 router.get('/:id', verifyUser, getUser);
 
 // Update the User Data
-router.put('/:id', updateUser);
+router.put('/:id', verifyUser, updateUser);
 
 // Delete the User Object from DB
-router.delete('/:id', deleteUser);
+router.delete('/:id', verifyUser, deleteUser);
 
 export default router;
