@@ -22,12 +22,9 @@ export const getUser = async (req, res, next) => {
 
 export const updateUser = async (req, res, next) => {
   try {
-    // const salt = bcrypt.genSaltSync(10);
-    // const hash = bcrypt.hashSync(req.body.password, salt);
-
     const updateUser = await User.findByIdAndUpdate(
       req.params.id,
-      { $set: req.body },
+      { $set: req.body},
       { new: true }
     );
     res.status(200).json(updateUser);

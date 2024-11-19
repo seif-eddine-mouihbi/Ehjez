@@ -1,5 +1,7 @@
 import express from 'express';
 import {
+  countByCity,
+  countByType,
   createHotel,
   deleteHotel,
   getHotel,
@@ -10,6 +12,16 @@ import { verifyAdmin } from '../utils/verify_token.js';
 
 const router = express.Router();
 
+{
+  /* -------- CRUD Router ---------*/
+}
+
+// Get All The Hotels
+router.get('/', getHotels);
+
+//get Hotel by id
+router.get('/find/:id', getHotel);
+
 // Create Hotel
 router.post('/', verifyAdmin, createHotel);
 
@@ -19,10 +31,14 @@ router.put('/:id', verifyAdmin, updateHotel);
 //Delete Hotel
 router.delete('/:id', verifyAdmin, deleteHotel);
 
-//get Hotel by id
-router.get('/:id', getHotel);
+{
+  /* -------- Secondary Router -------- */
+}
 
-// Get All The Hotels
-router.get('/', getHotels);
+// Get The Hotels By Type
+router.get('/countByType', countByType);
+
+// Get The Hotels By City
+router.get('/countByCity', countByCity);
 
 export default router;

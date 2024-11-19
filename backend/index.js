@@ -6,6 +6,7 @@ import hotelsRouter from './routes/hotels.js';
 import roomsRouter from './routes/rooms.js';
 import usersRouter from './routes/users.js';
 import cookieParser from 'cookie-parser';
+import cors from 'cors';
 
 const app = express();
 dotenv.config();
@@ -35,6 +36,8 @@ mongoose.connection.on('Connected', () => {
 {
   /* --------  The Middlewares --------- */
 }
+// CORS Middlewares for access the origin control
+app.use(cors());
 
 //Cookie
 app.use(cookieParser());
@@ -60,7 +63,7 @@ app.use((err, req, res, next) => {
 });
 
 // The initial connect with server
-app.listen(8800, () => {
+app.listen(8080, () => {
   dbConnect();
   console.log('Connected to backend!');
 });
