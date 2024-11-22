@@ -11,10 +11,18 @@ import {
   faLocationDot,
 } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
+import useFetch from '../../hooks/useFetch';
+import { useLocation } from 'react-router-dom';
 
 const Hotel = () => {
+  const location = useLocation();
+  const id = location.pathname.split('/')[2];
+
   const [slideNumber, setSlideNumber] = useState(0);
   const [open, setOpen] = useState(false);
+
+  const { data, loading, error } = useFetch(`/api/hotels/find/${id}`);
+  // console.log(data);
 
   const handleOpen = (i) => {
     setSlideNumber(i);
@@ -29,7 +37,7 @@ const Hotel = () => {
       newSliderNumber = slideNumber === 5 ? 0 : slideNumber + 1;
     }
 
-    setSlideNumber(newSliderNumber)
+    setSlideNumber(newSliderNumber);
   };
   const photos = [
     {
@@ -55,88 +63,88 @@ const Hotel = () => {
     <div>
       <Navbar />
       <Header type="list" />
-      <div className="hotelContainer">
-        {open && (
-          <div className="slider">
-            <FontAwesomeIcon
-              icon={faCircleXmark}
-              className="close"
-              onClick={() => setOpen(false)}
-            />
-            <FontAwesomeIcon
-              icon={faCircleArrowLeft}
-              className="arrow"
-              onClick={() => {
-                handleMove('l');
-              }}
-            />
-            <div className="sliderWrapper">
-              <img
-                src={photos[slideNumber].src}
-                alt="slide img"
-                className="sliderImg"
+      {loading ? (
+        'loading'
+      ) : (
+        <div className="hotelContainer">
+          {open && (
+            <div className="slider">
+              <FontAwesomeIcon
+                icon={faCircleXmark}
+                className="close"
+                onClick={() => setOpen(false)}
               />
-            </div>
-            <FontAwesomeIcon
-              icon={faCircleArrowRight}
-              className="arrow"
-              onClick={() => handleMove('r')}
-            />
-          </div>
-        )}
-        <div className="hotelWrapper">
-          <button className="bookNow">Reserve or book now</button>
-          <h1 className="hotelTitle">Grand Hotel</h1>
-          <div className="hotelAddress">
-            <FontAwesomeIcon icon={faLocationDot} />
-            <span>Elton St 125 New york</span>
-          </div>
-          <span className="hotelDistance">
-            Excellent location - 500m from center
-          </span>
-          <span className="hotelPriceHighlight">
-            Book a stay over $114 at this property and get a free airport taxi
-          </span>
-          <div className="hotelImgs">
-            {photos.map((photo, i) => (
-              <div className="hotelImageWrapper">
+              <FontAwesomeIcon
+                icon={faCircleArrowLeft}
+                className="arrow"
+                onClick={() => {
+                  handleMove('l');
+                }}
+              />
+              <div className="sliderWrapper">
                 <img
-                  src={photo.src}
-                  alt="hotel image"
-                  className="hotelImg"
-                  onClick={() => handleOpen(i)}
+                  src={photos[slideNumber].src}
+                  alt="slide img"
+                  className="sliderImg"
                 />
               </div>
-            ))}
-          </div>
-          <div className="hotelDeatils">
-            <div className="hotelDetailsTexts">
-              <h1 className="hotelTitle">Stay in the heart of krakow</h1>
-              <p className="hotelDesc">
-                Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                Ducimus laudantium repellendus blanditiis consectetur fugiat
-                magnam numquam dolore. Eos ab vel id maiores cumque
-                necessitatibus repudiandae dolores ad placeat distinctio. Earum?
-              </p>
+              <FontAwesomeIcon
+                icon={faCircleArrowRight}
+                className="arrow"
+                onClick={() => handleMove('r')}
+              />
             </div>
-            <div className="hotelDetailsPrice">
-              <h1 className="priceTitle">Perfect for a 9-night stay!</h1>
-              <p className="contentPrice">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Veritatis eveniet dolorum dolores est. Aperiam consectetur nam
-                expedita earum tempore recusandae facere sapiente eaque minima
-                esse. Reiciendis saepe explicabo tempora! Ex.
-              </p>
-              <h2 className="price">
-                <b>$945</b> (9 nights)
-              </h2>
-              <button className="hotelPriceBtn">Reserve or Book Now!</button>
+          )}
+          <div className="hotelWrapper">
+            <button className="bookNow">Reserve or book now</button>
+            <h1 className="hotelTitle">{data.name}</h1>
+            <div className="hotelAddress">
+              <FontAwesomeIcon icon={faLocationDot} />
+              <span>{data.address}</span>
+            </div>
+            <span className="hotelDistance">{data.distance}</span>
+            <span className="hotelPriceHighlight">
+              Book a stay over ${data.cheapsetPrice} at this property and get a
+              free airport taxi
+            </span>
+            <div className="hotelImgs">
+              {photos.map((photo, i) => (
+                <div className="hotelImageWrapper" key={i}>
+                  <img
+                    src={photo.src}
+                    alt="hotel image"
+                    className="hotelImg"
+                    onClick={() => handleOpen(i)}
+                  />
+                </div>
+              ))}
+            </div>
+            <div className="hotelDeatils">
+              <div className="hotelDetailsTexts">
+                <h1 className="hotelTitle">{data.title}</h1>
+                <p className="hotelDesc">
+                  {data.description}
+                </p>
+              </div>
+              <div className="hotelDetailsPrice">
+                <h1 className="priceTitle">Perfect for a 9-night stay!</h1>
+                <p className="contentPrice">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                  Veritatis eveniet dolorum dolores est. Aperiam consectetur nam
+                  expedita earum tempore recusandae facere sapiente eaque minima
+                  esse. Reiciendis saepe explicabo tempora! Ex.
+                </p>
+                <h2 className="price">
+                  <b>$945</b> (9 nights)
+                </h2>
+                <button className="hotelPriceBtn">Reserve or Book Now!</button>
+              </div>
             </div>
           </div>
+          <MailList />
+          <Footer />
         </div>
-        <MailList />
-        <Footer />
-      </div>
+      )}
     </div>
   );
 };

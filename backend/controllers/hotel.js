@@ -6,7 +6,7 @@ export const getHotels = async (req, res, next) => {
   try {
     const findHotels = await Hotel.find({
       ...others,
-      cheapsetPrice: { $gte: min | 1, $lte: max || 9999 },
+      cheapsetPrice: { $gte: min || 1, $lte: max || 9999 },
     }).limit(limit);
     res.status(200).json(findHotels);
   } catch (err) {
