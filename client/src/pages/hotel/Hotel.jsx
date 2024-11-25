@@ -12,7 +12,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { useContext, useState } from 'react';
 import useFetch from '../../hooks/useFetch';
-import { useLocation } from 'react-router-dom';
+import { json, useLocation } from 'react-router-dom';
 import { SearchContext } from '../../context/SearchContext.jsx';
 
 const Hotel = () => {
@@ -21,24 +21,27 @@ const Hotel = () => {
 
   const [slideNumber, setSlideNumber] = useState(0);
   const [open, setOpen] = useState(false);
-  // const [days, setDays] = useState(null)
 
   const { data, loading, error } = useFetch(`/api/hotels/find/${id}`);
   // console.log(data);
 
   // Passing The Data with the context Api
-  const { date } = useContext(SearchContext);
-  console.log(date); /* ----- Debugging Statment ----- */
+  // const { date } = useContext(SearchContext);
+
+  const date = JSON.parse(localStorage.getItem('date')) 
+  console.log(date);  /* Debugging Statment */
+  
+
 
   // this function for get how much day we reserved between the start-date & the end-date
   const MILLISECONDS_PER_DAY = 1000 * 60 * 60 * 24;
-  function dayCalculate(date_1, date_2) {
-    const timeDiff = Math.abs(date_2.getTime() - date_1.getTime());
+  function dayCalculate(endDate, startDate) {
+    const timeDiff = Math.abs(endDate.getTime() - startDate);
     const diffDays = Math.ceil(timeDiff / MILLISECONDS_PER_DAY);
     return diffDays;
   }
   /* ----- There is Bug Here ------ */
-  // const daysValue = dayCalculate(date[0].endDate, date[0].startDate);
+  const days = dayCalculate(date[0].endDate, date[0].startDate);
 
   const handleOpen = (i) => {
     setSlideNumber(i);
@@ -149,7 +152,7 @@ const Hotel = () => {
                   esse. Reiciendis saepe explicabo tempora! Ex.
                 </p>
                 <h2 className="price">
-                  <b>$945</b> ({days} nights)
+                  <b>$945</b> ( {days} nights)
                 </h2>
                 <button className="hotelPriceBtn">Reserve or Book Now!</button>
               </div>
