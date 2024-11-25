@@ -10,9 +10,10 @@ import {
   faCircleXmark,
   faLocationDot,
 } from '@fortawesome/free-solid-svg-icons';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import useFetch from '../../hooks/useFetch';
 import { useLocation } from 'react-router-dom';
+import { SearchContext } from '../../context/SearchContext.jsx';
 
 const Hotel = () => {
   const location = useLocation();
@@ -20,9 +21,24 @@ const Hotel = () => {
 
   const [slideNumber, setSlideNumber] = useState(0);
   const [open, setOpen] = useState(false);
+  // const [days, setDays] = useState(null)
 
   const { data, loading, error } = useFetch(`/api/hotels/find/${id}`);
   // console.log(data);
+
+  // Passing The Data with the context Api
+  const { date } = useContext(SearchContext);
+  console.log(date); /* ----- Debugging Statment ----- */
+
+  // this function for get how much day we reserved between the start-date & the end-date
+  const MILLISECONDS_PER_DAY = 1000 * 60 * 60 * 24;
+  function dayCalculate(date_1, date_2) {
+    const timeDiff = Math.abs(date_2.getTime() - date_1.getTime());
+    const diffDays = Math.ceil(timeDiff / MILLISECONDS_PER_DAY);
+    return diffDays;
+  }
+  /* ----- There is Bug Here ------ */
+  // const daysValue = dayCalculate(date[0].endDate, date[0].startDate);
 
   const handleOpen = (i) => {
     setSlideNumber(i);
@@ -122,9 +138,7 @@ const Hotel = () => {
             <div className="hotelDeatils">
               <div className="hotelDetailsTexts">
                 <h1 className="hotelTitle">{data.title}</h1>
-                <p className="hotelDesc">
-                  {data.description}
-                </p>
+                <p className="hotelDesc">{data.description}</p>
               </div>
               <div className="hotelDetailsPrice">
                 <h1 className="priceTitle">Perfect for a 9-night stay!</h1>
@@ -135,7 +149,7 @@ const Hotel = () => {
                   esse. Reiciendis saepe explicabo tempora! Ex.
                 </p>
                 <h2 className="price">
-                  <b>$945</b> (9 nights)
+                  <b>$945</b> ({days} nights)
                 </h2>
                 <button className="hotelPriceBtn">Reserve or Book Now!</button>
               </div>

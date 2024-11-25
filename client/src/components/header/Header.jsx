@@ -9,11 +9,12 @@ import {
 import './header.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { DateRange } from 'react-date-range';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css'; // theme css file
 import { format } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
+import { SearchContext } from '../../context/SearchContext.jsx';
 
 function Header({ type }) {
   const [destination, setDestination] = useState('');
@@ -41,9 +42,13 @@ function Header({ type }) {
     });
   };
 
+  // Passing The Data with the context Api
+  const { dispatch } = useContext(SearchContext);
+
   const navigate = useNavigate();
 
   const handleSearch = () => {
+    dispatch({ type: 'NEW_SEARCH', payload: { destination, date, options } });
     navigate('/hotels', { state: { destination, date, options } });
   };
 

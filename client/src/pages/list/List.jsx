@@ -20,7 +20,7 @@ function List() {
   const [max, setMax] = useState(undefined);
 
   const { data, loading, error, reFetch } = useFetch(
-    `api/hotels?city=${destination}&min=${min || 1}&max=${max || 9999}`
+    `/api/hotels?city=${destination}&min=${min || 1}&max=${max || 9999}`
   );
 
   const handleClick = () => {
@@ -37,7 +37,7 @@ function List() {
             <h1 className="lsTitle">Search</h1>
             <div className="lsItem">
               <label>Destination</label>
-              <input type="text" placeholder={destination} />
+              <input type="text" placeholder={destination} onChange={(e)=>{setDestination(e.target.value)}} />
             </div>
             <div className="lsItem">
               <label>Check-in date</label>
