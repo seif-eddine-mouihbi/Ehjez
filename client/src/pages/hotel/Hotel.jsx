@@ -10,9 +10,9 @@ import {
   faCircleXmark,
   faLocationDot,
 } from '@fortawesome/free-solid-svg-icons';
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import useFetch from '../../hooks/useFetch';
-import { json, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { SearchContext } from '../../context/SearchContext.jsx';
 
 const Hotel = () => {
@@ -22,26 +22,33 @@ const Hotel = () => {
   const [slideNumber, setSlideNumber] = useState(0);
   const [open, setOpen] = useState(false);
 
+  // Fetching The Data From The Server
   const { data, loading, error } = useFetch(`/api/hotels/find/${id}`);
   // console.log(data);
 
-  // Passing The Data with the context Api
-  // const { date } = useContext(SearchContext);
+  //The bug For Display The Days in the client i fixed and this is the logic.
+  // In the next update i will try to clean the code
+  const date = () => {
+    const dates = localStorage.getItem('date');
+    return JSON.parse(dates);
+  };
 
-  const date = JSON.parse(localStorage.getItem('date')) 
-  console.log(date);  /* Debugging Statment */
-  
-
+  const [dates, setDates] = useState([
+    new Date(date()[0].endDate),
+    new Date(date()[0].startDate),
+  ]);
+  // console.log(dates[0]);
 
   // this function for get how much day we reserved between the start-date & the end-date
-  const MILLISECONDS_PER_DAY = 1000 * 60 * 60 * 24;
-  function dayCalculate(endDate, startDate) {
-    const timeDiff = Math.abs(endDate.getTime() - startDate);
+  function dayCalculate(date1, date2) {
+    const MILLISECONDS_PER_DAY = 1000 * 60 * 60 * 24;
+    const timeDiff = Math.abs(date1.getTime() - date2.getTime());
     const diffDays = Math.ceil(timeDiff / MILLISECONDS_PER_DAY);
     return diffDays;
   }
-  /* ----- There is Bug Here ------ */
-  const days = dayCalculate(date[0].endDate, date[0].startDate);
+
+  // This Variable for display how much the days number for reserving
+  const days = dayCalculate(dates[0], dates[1]);
 
   const handleOpen = (i) => {
     setSlideNumber(i);
@@ -144,7 +151,7 @@ const Hotel = () => {
                 <p className="hotelDesc">{data.description}</p>
               </div>
               <div className="hotelDetailsPrice">
-                <h1 className="priceTitle">Perfect for a 9-night stay!</h1>
+                <h1 className="priceTitle">Perfect for a {days}-night stay!</h1>
                 <p className="contentPrice">
                   Lorem ipsum dolor sit amet consectetur adipisicing elit.
                   Veritatis eveniet dolorum dolores est. Aperiam consectetur nam
@@ -152,7 +159,7 @@ const Hotel = () => {
                   esse. Reiciendis saepe explicabo tempora! Ex.
                 </p>
                 <h2 className="price">
-                  <b>$945</b> ( {days} nights)
+                  <b>${data.cheapsetPrice * days}</b> ({days} nights)
                 </h2>
                 <button className="hotelPriceBtn">Reserve or Book Now!</button>
               </div>

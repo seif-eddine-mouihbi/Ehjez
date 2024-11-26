@@ -2,11 +2,12 @@ import Navbar from '../../components/navbar/Navbar';
 import Header from '../../components/header/Header';
 import './list.css';
 import { useLocation } from 'react-router-dom';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { format } from 'date-fns';
 import { DateRange } from 'react-date-range';
 import SearchItem from '../../components/searchItem/SearchItem';
 import useFetch from '../../hooks/useFetch';
+import { SearchContext } from '../../context/SearchContext';
 
 function List() {
   const location = useLocation();
@@ -37,7 +38,13 @@ function List() {
             <h1 className="lsTitle">Search</h1>
             <div className="lsItem">
               <label>Destination</label>
-              <input type="text" placeholder={destination} onChange={(e)=>{setDestination(e.target.value)}} />
+              <input
+                type="text"
+                placeholder={destination}
+                onChange={(e) => {
+                  setDestination(e.target.value);
+                }}
+              />
             </div>
             <div className="lsItem">
               <label>Check-in date</label>
