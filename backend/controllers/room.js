@@ -54,3 +54,7 @@ export const deleteRoom = async (req, res, next) => {
     next(err);
   }
 };
+
+export const updateAvailbleRoom = ()=>{
+  
+}
