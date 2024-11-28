@@ -24,13 +24,13 @@ const searchReducer = (state, action) => {
 };
 
 export const SearchContextProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(searchReducer, INITIAL_STATE);  
+  const [state, dispatch] = useReducer(searchReducer, INITIAL_STATE);
 
   useEffect(() => {
     if (state.date !== undefined) {
       localStorage.setItem('date', JSON.stringify(state.date));
     } else {
-      return
+      return;
     }
   }, [state.date]);
 

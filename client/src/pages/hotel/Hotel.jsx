@@ -10,10 +10,11 @@ import {
   faCircleXmark,
   faLocationDot,
 } from '@fortawesome/free-solid-svg-icons';
-import { useContext, useState, useEffect } from 'react';
+import { useContext, useState } from 'react';
 import useFetch from '../../hooks/useFetch';
-import { useLocation } from 'react-router-dom';
-import { SearchContext } from '../../context/SearchContext.jsx';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { AuthContext } from '../../context/AuthContext';
+import Reserve from '../../components/reserve/Reserve';
 
 const Hotel = () => {
   const location = useLocation();
@@ -21,6 +22,7 @@ const Hotel = () => {
 
   const [slideNumber, setSlideNumber] = useState(0);
   const [open, setOpen] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
 
   // Fetching The Data From The Server
   const { data, loading, error } = useFetch(`/api/hotels/find/${id}`);
@@ -85,6 +87,19 @@ const Hotel = () => {
       src: 'https://cf2.bstatic.com/xdata/images/hotel/max1280x900/375181225.jpg?k=b05bacbffa9768e6bb5c2d5df6f314bc18fd85caa39f297d81040855abd0f763&o=&hp=1',
     },
   ];
+
+  // Import user Object from The AuthContext API
+  const { user } = useContext(AuthContext);
+
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    if (user) {
+      setOpenModal(true);
+    } else {
+      navigate('/login');
+    }
+  };
   return (
     <div>
       <Navbar />
@@ -161,7 +176,9 @@ const Hotel = () => {
                 <h2 className="price">
                   <b>${data.cheapsetPrice * days}</b> ({days} nights)
                 </h2>
-                <button className="hotelPriceBtn">Reserve or Book Now!</button>
+                <button className="hotelPriceBtn" onClick={handleClick}>
+                  Reserve or Book Now!
+                </button>
               </div>
             </div>
           </div>
@@ -169,6 +186,7 @@ const Hotel = () => {
           <Footer />
         </div>
       )}
+      {openModal && <Reserve setOpen={setOpenModal} hotelId= {id}/>}
     </div>
   );
 };

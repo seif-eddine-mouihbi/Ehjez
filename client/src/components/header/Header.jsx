@@ -43,7 +43,7 @@ function Header({ type }) {
   };
 
   // Passing The Data with the context Api
-  const { dispatch } = useContext(SearchContext);
+  const { user, dispatch } = useContext(SearchContext);
 
   const navigate = useNavigate();
 
@@ -87,7 +87,7 @@ function Header({ type }) {
             <p className="headerDesc">
               Search deals on hotels, homes, and much more...
             </p>
-            <button className="headerBtn">Sign in / Register</button>
+            {user && <button className="headerBtn">Sign in / Register</button>}
 
             <div className="headerSearch">
               <div className="headerSerchItem">
