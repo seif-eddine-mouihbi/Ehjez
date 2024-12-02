@@ -2,13 +2,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './reserve.css';
 import { faCircleXmark } from '@fortawesome/free-solid-svg-icons';
 import useFetch from '../../hooks/useFetch';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { SearchContext } from '../../context/SearchContext';
 
 const Reserve = ({ setOpen, hotelId }) => {
   const [selectedRooms, setSelectedRooms] = useState([]);
   const { data, loading, error } = useFetch(`/api/hotels/room/${hotelId}`);
   // console.log(data);
-  
+  const { date } = useContext(SearchContext);
+  // console.log(typeof date);
 
   const handleSelect = (e) => {
     const checked = e.target.checked;
@@ -21,9 +23,8 @@ const Reserve = ({ setOpen, hotelId }) => {
   };
   // console.log(selectedRooms);
 
-  const handleClick = ()=>{
-
-  }
+  //Start Here
+  const handleClick = () => {};
 
   return (
     <div className="reserve">
@@ -58,7 +59,9 @@ const Reserve = ({ setOpen, hotelId }) => {
             ))}
           </div>
         ))}
-        <button onClick={handleClick} className="rButton">Rserve Now!</button>
+        <button onClick={handleClick} className="rButton">
+          Rserve Now!
+        </button>
       </div>
     </div>
   );

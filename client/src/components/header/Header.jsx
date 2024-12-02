@@ -26,6 +26,8 @@ function Header({ type }) {
       key: 'selection',
     },
   ]);
+  // console.log(typeof date);
+  
   const [openOptions, setOpenOptions] = useState(false);
   const [options, setOptions] = useState({
     adults: 1,
