@@ -25,7 +25,7 @@ const Navbar = () => {
                 height={24}
                 className="w-6 h-6"
               />
-              <div className="text-xl font-bold">
+              <div className="text-3xl font-bold">
                 Eh
                 <span className="text-secondary-500 font-bold hover:!text-primary-300">
                   jez
