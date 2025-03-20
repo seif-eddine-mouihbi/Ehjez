@@ -1,5 +1,6 @@
 'use client';
 
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
@@ -35,9 +36,12 @@ const HeroSection = () => {
               type="text"
               value={'search query'}
               placeholder="Search by city, neighborhood or address"
-              className="w-full max-w-lg rounded-none rounded-l-xl border-none bg-white h-12"
+              className="w-full max-w-lg rounded-none rounded-l-xl border-none bg-white dark:bg-white h-12"
               onChange={() => {}}
             />
+            <Button className=" h-12 bg-secondary-500 text-white rounded-none rounded-r-xl border-none hover:bg-secondary-600">
+              Search
+            </Button>
           </div>
         </div>
       </motion.div>
